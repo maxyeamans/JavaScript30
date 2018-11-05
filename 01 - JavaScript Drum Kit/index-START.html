@@ -59,6 +59,31 @@
 
 <script>
 
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if (!audio) return; /* This stops the function if there's no audio associated with the key */
+    audio.currentTime = 0;
+    /*  We have to add the line above so that the browser doesn't wait until the first sound
+        is finished playing before allowing it to be played again. */
+    audio.play();
+    key.classList.add("playing");
+  }
+
+  function removeTransition(e) {
+    if (e.propertyName !== "transform") {
+      return; // Skip this function if the event isn't a transform
+    }
+    this.classList.remove("playing");
+  }
+
+  const keys = document.querySelectorAll(".key");
+  keys.forEach(key => {
+    key.addEventListener("transitionend", removeTransition );
+  })
+
+  window.addEventListener("keydown", playSound);
+
 </script>
 
 

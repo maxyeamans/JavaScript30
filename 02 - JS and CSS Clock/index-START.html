@@ -62,12 +62,39 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%; /* The percentage is where on the x-axis the transform starts. Middle is 50%, far right is 100% */
+      transform: rotate(90deg); /* Start the hands at 12:00 */
+      transition: all 0.05s; /* Make transitions take some time */
+      transition-timing-function: cubic-bezier(0.1, 2.5, 0.58, 1);
     }
 
   </style>
 
   <script>
 
+    const secondsHand = document.querySelector(".second-hand");
+    const minutesHand = document.querySelector(".min-hand");
+    const hoursHand = document.querySelector(".hour-hand");
+
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const secondsDegrees = ( (seconds / 60) * 360 ) + 90;
+      /* The line above turns the seconds value into the seconds hand position in degrees */
+      
+      const minutes = now.getMinutes();
+      const minutesDegrees = ( (minutes / 60) * 360 ) + 90;
+
+      const hours = now.getHours();
+      const hoursDegrees = ( (hours / 12 ) * 360 ) + 90;
+
+      secondsHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      /* Changing CSS in javascript. Who knew you could do that? (I didn't.) */
+      minutesHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
+    }
+
+    setInterval(setDate, 1000);
 
   </script>
 </body>
