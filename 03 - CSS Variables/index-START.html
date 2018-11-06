@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
 </head>
+
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
@@ -21,6 +23,23 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+    /* Root values for styling get applies to the entire page */
+    /* CSS variables should be prefixed with '--' */
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
 
     /*
       misc styles, nothing to do with CSS variables
@@ -45,7 +64,24 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll(".controls input");
+    /* NOTE: this adds all input controls to a nodelist, NOT an array. */
+    
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || "";
+      /* dataset pulls in all of the data- attributes from an element and puts them in an object for you to use */
+      console.log(this.name);
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+      /*  For the last argument, you could do something like `${this.value}${suffix}` I guess.
+      *   I tried it and it doesn't look as nice as I thought it would. */
+    }
+
+    inputs.forEach(input => input.addEventListener("change", handleUpdate));
+    inputs.forEach(input => input.addEventListener("mousemove", handleUpdate));
+    /* Adding a mousemove event handler ensures that you see the changes as you manipulate the controls. */
+
   </script>
 
 </body>
+
 </html>
